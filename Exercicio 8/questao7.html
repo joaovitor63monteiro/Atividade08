@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Pizzaria Cleo Esfoms - Controle de Pedidos</title>
+</head>
+
+<body>
+    <h1>Pizzaria Cleo Esfoms - Controle de Pedidos</h1>
+    <h2>Atendimento para Garçom</h2>
+    <p>Selecione o tipo de item:</p>
+    <input type="radio" name="tipoItem" value="pizza" checked>Pizza
+    <input type="radio" name="tipoItem" value="bebida">Bebida
+
+    <br><br>
+
+    <p>Lista de Itens:</p>
+    <select id="listaItens">
+    </select>
+
+    <br><br>
+
+    <button onclick="adicionarItem()">Adicionar Item</button>
+    <button onclick="enviarPedido()">Enviar Pedido</button>
+
+    <br><br>
+
+    <h3>Pedido:</h3>
+    <ul id="pedido">
+    </ul>
+
+    <script>
+        const pizzas = ['Pizza de Calabresa', 'Pizza de Margherita', 'Pizza de Frango com Catupiry'];
+        const bebidas = ['Coca-Cola', 'Guaraná', 'Água'];
+
+        function atualizarListaItens() {
+            const tipoSelecionado = document.querySelector('input[name="tipoItem"]:checked').value;
+            const listaItens = document.getElementById('listaItens');
+
+            listaItens.innerHTML = '';
+
+            const itens = tipoSelecionado === 'pizza' ? pizzas : bebidas;
+            for (let i = 0; i < itens.length; i++) {
+                const option = document.createElement('option');
+                option.text = itens[i];
+                listaItens.add(option);
+            }
+        }
+
+        function adicionarItem() {
+            const listaItens = document.getElementById('listaItens');
+            const itemSelecionado = listaItens.options[listaItens.selectedIndex].text;
+
+            const pedido = document.getElementById('pedido');
+            const li = document.createElement('li');
+            li.textContent = itemSelecionado;
+            pedido.appendChild(li);
+        }
+
+        function enviarPedido() {
+            const pedido = document.getElementById('pedido');
+            const itensPedido = pedido.getElementsByTagName('li');
+
+            if (itensPedido.length === 0) {
+                alert('O pedido está vazio. Adicione itens antes de enviar!');
+            } else {
+                const listaItens = [];
+                for (let i = 0; i < itensPedido.length; i++) {
+                    listaItens.push(itensPedido[i].textContent);
+                }
+                const pedidoFinal = listaItens.join(', ');
+                alert('Pedido enviado com sucesso! Itens do pedido: ' + pedidoFinal);
+            }
+        }
+
+        document.querySelectorAll('input[name="tipoItem"]').forEach(function (radio) {
+            radio.addEventListener('change', atualizarListaItens);
+        });
+
+        atualizarListaItens();
+    </script>
+</body>
+
+</html>

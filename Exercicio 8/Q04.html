@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Consultório Odontológico</title>
+</head>
+<body>
+    <h1>Consultório Odontológico</h1>
+    <form>
+        <label for="nomePaciente">Nome do Paciente:</label><br>
+        <input type="text" id="nomePaciente" name="nomePaciente"><br><br>
+        <button type="button" onclick="adicionarPaciente()">Adicionar Paciente</button>
+    </form>
+    <h2>Em Atendimento: <span id="pacienteAtendimento"></span></h2>
+    <h3>Lista de Espera:</h3>
+    <ul id="listaEspera">
+    </ul>
+    <button type="button" onclick="atenderProximoPaciente()">Atender Próximo Paciente</button>
+    <script>
+        let pacientes = [];
+
+        function adicionarPaciente() {
+            let nomePaciente = document.getElementById("nomePaciente").value;
+            pacientes.push(nomePaciente);
+            atualizarListaEspera();
+        }
+
+        function atenderProximoPaciente() {
+            if (pacientes.length > 0) {
+                let proximoPaciente = pacientes.shift();
+                document.getElementById("pacienteAtendimento").innerHTML = proximoPaciente;
+                atualizarListaEspera();
+            }
+        }
+
+        function atualizarListaEspera() {
+            let listaEspera = document.getElementById("listaEspera");
+            let lista = "";
+            for (let i = 0; i < pacientes.length; i++) {
+                lista += `<li>${pacientes[i]}</li>`;
+            }
+            listaEspera.innerHTML = lista;
+        }
+    </script>
+</body>
+</html>

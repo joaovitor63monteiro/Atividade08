@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Revenda Herbie</title>
+</head>
+<body>
+  <h1>Revenda Herbie</h1>
+  <h2>Carros Disponíveis</h2>
+  <div>
+    <label for="filter-price">Filtrar por preço:</label>
+    <input type="number" id="filter-price">
+    <button onclick="filterByPrice()">Filtrar</button>
+    <button onclick="resetFilter()">Limpar Filtro</button>
+  </div>
+  <div>
+    <label for="filter-model">Pesquisar por modelo:</label>
+    <input type="text" id="filter-model">
+    <button onclick="filterByModel()">Pesquisar</button>
+    <button onclick="resetModelFilter()">Limpar Pesquisa</button>
+  </div>
+  <div>
+    <button onclick="simulatePromotion()">Simular Promoção</button>
+  </div>
+  <div>
+    <h3>Carros</h3>
+    <ul id="car-list">
+    </ul>
+  </div>
+
+  <script>
+    class Carro {
+      constructor(modelo, preco) {
+        this.modelo = modelo;
+        this.preco = preco;
+      }
+    }
+
+    const carrosDisponiveis = [
+      new Carro("Fusca", 20000),
+      new Carro("Gol", 40000),
+      new Carro("Jetta", 80000),
+      new Carro("Tiguan", 100000),
+      new Carro("Touareg", 120000),
+    ];
+
+    function exibirCarros(carros) {
+      const carList = document.getElementById("car-list");
+      carList.innerHTML = "";
+
+      carros.forEach((carro) => {
+        const listItem = document.createElement("li");
+        listItem.textContent = `${carro.modelo} - R$ ${carro.preco.toFixed(2)}`;
+        carList.appendChild(listItem);
+      });
+    }
+
+    function filterByPrice() {
+      const filterPriceInput = document.getElementById("filter-price");
+      const filterPriceValue = parseFloat(filterPriceInput.value);
+
+      if (!isNaN(filterPriceValue)) {
+        const filteredCars = carrosDisponiveis.filter(
+          (carro) => carro.preco <= filterPriceValue
+        );
+        exibirCarros(filteredCars);
+      } else {
+        alert("Insira um valor numérico válido para filtrar por preço.");
+      }
+    }
+
+    function resetFilter() {
+      exibirCarros(carrosDisponiveis);
+    }
+
+    function filterByModel() {
+      const filterModelInput = document.getElementById("filter-model");
+      const filterModelValue = filterModelInput.value.trim().toLowerCase();
+
+      if (filterModelValue === "") {
+        alert("Insira um modelo válido para pesquisar.");
+        return;
+      }
+
+      const filteredCars = carrosDisponiveis.filter(
+        (carro) => carro.modelo.toLowerCase().includes(filterModelValue)
+      );
+      exibirCarros(filteredCars);
+    }
+
+    function resetModelFilter() {
+      document.getElementById("filter-model").value = "";
+      exibirCarros(carrosDisponiveis);
+    }
+
+    function simulatePromotion() {
+      const desconto = 0.2;
+      const carrosPromocao = carrosDisponiveis.map((carro) => {
+        return { ...carro, preco: carro.preco * (1 - desconto) };
+      });
+      exibirCarros(carrosPromocao);
+    }
+
+    exibirCarros(carrosDisponiveis);
+  </script>
+</body>
+</html>

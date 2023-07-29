@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Programa Contas do Mês</title>
+</head>
+<body>
+    <h1>Programa Contas do Mês</h1>
+    <form>
+        <label for="descricaoConta">Descrição da Conta:</label><br>
+        <input type="text" id="descricaoConta" name="descricaoConta"><br>
+        <label for="valorConta">Valor a Pagar R$:</label><br>
+        <input type="number" id="valorConta" name="valorConta"><br><br>
+        <button type="button" onclick="registrarConta()">Registrar Conta</button>
+    </form>
+    <table id="tabelaContas">
+    </table>
+    <p id="totalContas"></p>
+    <script>
+        let contas = [];
+
+        function registrarConta() {
+            let descricao = document.getElementById("descricaoConta").value;
+            let valor = parseFloat(document.getElementById("valorConta").value);
+            contas.push({ descricao, valor });
+            atualizarTabela();
+        }
+
+        function atualizarTabela() {
+            let tabelaContas = document.getElementById("tabelaContas");
+            let totalContas = document.getElementById("totalContas");
+            let linhasTabela = "";
+            let total = 0;
+            for (let i = 0; i < contas.length; i++) {
+                let conta = contas[i];
+                linhasTabela += `<tr><td>${conta.descricao}</td><td>${conta.valor.toFixed(2)}</td></tr>`;
+                total += conta.valor;
+            }
+            tabelaContas.innerHTML = linhasTabela;
+            totalContas.innerHTML = `${contas.length} Conta(s) - Total R$ ${total.toFixed(2)}`;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Cadastro de Filmes</title>
+</head>
+
+<body>
+  <h1>Cadastro de Filmes</h1>
+  <label for="title">Título do Filme:</label>
+  <input type="text" id="title">
+  <label for="genre">Gênero:</label>
+  <input type="text" id="genre">
+  <button onclick="adicionarFilme()">Adicionar Filme</button>
+
+  <table id="filmeTable">
+    <thead>
+      <tr>
+        <th>Título</th>
+        <th>Gênero</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="filmeBody">
+    </tbody>
+  </table>
+
+  <script>
+    function adicionarFilme() {
+      var title = document.getElementById("title").value;
+      var genre = document.getElementById("genre").value;
+
+      if (title.trim() === '' || genre.trim() === '') {
+        alert("Por favor, preencha todos os campos.");
+        return;
+      }
+
+      var filme = {
+        title: title,
+        genre: genre
+      };
+
+      var filmes = JSON.parse(localStorage.getItem("filmes")) || [];
+
+      filmes.push(filme);
+      localStorage.setItem("filmes", JSON.stringify(filmes));
+
+      atualizarTabela();
+      document.getElementById("title").value = "";
+      document.getElementById("genre").value = "";
+    }
+
+    function excluirFilme(index) {
+      var filmes = JSON.parse(localStorage.getItem("filmes"));
+      filmes.splice(index, 1);
+      localStorage.setItem("filmes", JSON.stringify(filmes));
+      atualizarTabela();
+    }
+
+    function atualizarTabela() {
+      var filmes = JSON.parse(localStorage.getItem("filmes")) || [];
+      var tableBody = document.getElementById("filmeBody");
+      tableBody.innerHTML = '';
+
+      filmes.forEach(function (filme, index) {
+        var newRow = tableBody.insertRow();
+
+        var titleCell = newRow.insertCell(0);
+        titleCell.innerHTML = filme.title;
+
+        var genreCell = newRow.insertCell(1);
+        genreCell.innerHTML = filme.genre;
+
+        var deleteCell = newRow.insertCell(2);
+        var deleteButton = document.createElement("button");
+        deleteButton.textContent = "Excluir";
+        deleteButton.onclick = function () {
+          excluirFilme(index);
+        };
+        deleteCell.appendChild(deleteButton);
+      });
+    }
+
+    window.onload = function () {
+      atualizarTabela();
+    };
+  </script>
+</body>
+
+</html>
